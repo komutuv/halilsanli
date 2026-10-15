@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#b00020" />
+  <title>Ziraat Bankası - Ödeme Bilgileri</title>
+
+  <style>
+    :root{
+      --bg:#f5f5f7;
+      --card:#ffffff;
+      --text:#171717;
+      --muted:#77777d;
+      --line:#ececef;
+      --red:#b00020;
+      --red-dark:#8f001a;
+      --soft-red:#fff1f3;
+      --shadow:0 18px 55px rgba(0,0,0,.10);
+      --radius:28px;
+    }
+
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      background:
+        radial-gradient(circle at top right, rgba(176,0,32,.08), transparent 34%),
+        linear-gradient(180deg,#ffffff 0%,var(--bg) 100%);
+      color:var(--text);
+      font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      min-height:100%;
+    }
+
+    body{
+      min-height:100dvh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:22px 16px calc(22px + env(safe-area-inset-bottom));
+    }
+
+    .shell{
+      width:100%;
+      max-width:460px;
+    }
+
+    .card{
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(0,0,0,.05);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      backdrop-filter:blur(18px);
+    }
+
+    .top{
+      padding:28px 24px 22px;
+      background:
+        linear-gradient(145deg,rgba(176,0,32,.98),rgba(122,0,20,.98)),
+        var(--red);
+      color:#fff;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .top::after{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      right:-70px;
+      top:-70px;
+      border:28px solid rgba(255,255,255,.07);
+      border-radius:50%;
+    }
+
+    .brand{
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      gap:13px;
+    }
+
+    .logo{
+      width:54px;
+      height:54px;
+      border-radius:18px;
+      background:#fff;
+      color:var(--red);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      font-size:24px;
+      box-shadow:0 10px 24px rgba(0,0,0,.14);
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:20px;
+      line-height:1.15;
+      letter-spacing:-.35px;
+    }
+
+    .brand p{
+      margin:5px 0 0;
+      font-size:13px;
+      opacity:.82;
+    }
+
+    .secure{
+      position:relative;
+      z-index:1;
+      margin-top:22px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.16);
+      padding:9px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+
+    .content{
+      padding:22px;
+    }
+
+    .intro{
+      margin:0 0 18px;
+      font-size:14px;
+      line-height:1.55;
+      color:var(--muted);
+    }
+
+    .field{
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:15px;
+      margin-bottom:12px;
+      background:#fff;
+      transition:.2s ease;
+    }
+
+    .field:active{
+      transform:scale(.995);
+    }
+
+    .label{
+      font-size:11px;
+      font-weight:800;
+      color:var(--muted);
+      letter-spacing:.75px;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .value{
+      flex:1;
+      min-width:0;
+      font-size:16px;
+      font-weight:800;
+      line-height:1.4;
+      word-break:break-word;
+      letter-spacing:.1px;
+    }
+
+    .iban{
+      font-size:15px;
+      letter-spacing:.55px;
+    }
+
+    .copy-btn{
+      border:0;
+      background:var(--soft-red);
+      color:var(--red);
+      min-width:46px;
+      height:46px;
+      border-radius:15px;
+      cursor:pointer;
+      font-size:19px;
+      font-weight:900;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+      transition:.18s ease;
+    }
+
+    .copy-btn:active{
+      transform:scale(.94);
+    }
+
+    .copy-btn.copied{
+      background:#e8f7ee;
+      color:#167c45;
+    }
+
+    .actions{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+
+    .main-btn{
+      width:100%;
+      border:0;
+      border-radius:18px;
+      padding:16px 18px;
+      font-size:15px;
+      font-weight:900;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      text-decoration:none;
+      transition:.18s ease;
+    }
+
+    .main-btn:active{
+      transform:scale(.985);
+    }
+
+    .copy-all{
+      background:var(--red);
+      color:#fff;
+      box-shadow:0 12px 24px rgba(176,0,32,.20);
+    }
+
+    .copy-all:hover{
+      background:var(--red-dark);
+    }
+
+    .whatsapp{
+      background:#1fb55d;
+      color:#fff;
+      box-shadow:0 12px 24px rgba(31,181,93,.18);
+    }
+
+    .note{
+      text-align:center;
+      color:#8b8b91;
+      font-size:11px;
+      line-height:1.5;
+      margin:16px 8px 0;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:24px;
+      transform:translateX(-50%) translateY(20px);
+      background:#171717;
+      color:#fff;
+      padding:11px 15px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:800;
+      opacity:0;
+      pointer-events:none;
+      transition:.25s ease;
+      z-index:999;
+      white-space:nowrap;
+      box-shadow:0 10px 30px rgba(0,0,0,.20);
+    }
+
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    @media (max-width:380px){
+      body{padding-left:10px;padding-right:10px;}
+      .top{padding:24px 18px 19px;}
+      .content{padding:18px;}
+      .value{font-size:15px;}
+      .iban{font-size:14px;}
+    }
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+    <section class="card">
+      <div class="top">
+        <div class="brand">
+          <div class="logo">Z</div>
+          <div>
+            <h1>Ziraat Bankası</h1>
+            <p>Havale / EFT ödeme bilgileri</p>
+          </div>
+        </div>
+
+        <div class="secure">🔒 Ödeme Bilgileri</div>
+      </div>
+
+      <div class="content">
+        <p class="intro">
+          Ödeme yaparken aşağıdaki bilgileri kullanabilirsiniz.
+          İstediğiniz alanı tek dokunuşla kopyalayabilirsiniz.
+        </p>
+
+        <div class="field">
+          <div class="label">Alıcı Adı / Ticari Unvan</div>
+          <div class="row">
+            <div class="value" id="recipient">Halil SANLI</div>
+            <button class="copy-btn" aria-label="Alıcı adını kopyala" onclick="copyField('recipient', this)">⧉</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="label">Banka Adı</div>
+          <div class="row">
+            <div class="value" id="bank">Ziraat Bankası</div>
+            <button class="copy-btn" aria-label="Banka adını kopyala" onclick="copyField('bank', this)">⧉</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="label">IBAN</div>
+          <div class="row">
+            <div class="value iban" id="iban">TR13 0001 0004 5552 2650 6950 01</div>
+            <button class="copy-btn" aria-label="IBAN kopyala" onclick="copyField('iban', this)">⧉</button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="main-btn copy-all" onclick="copyAll()">
+            📋 Tüm Bilgileri Kopyala
+          </button>
+
+          <a class="main-btn whatsapp" id="whatsappShare" href="#" target="_blank" rel="noopener">
+            💬 WhatsApp'tan Paylaş
+          </a>
+        </div>
+
+        <div class="note">
+          IBAN kopyalanırken boşluklar otomatik olarak kaldırılır.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Kopyalandı</div>
+
+  <script>
+    const data = {
+      recipient: "Halil SANLI",
+      bank: "Ziraat Bankası",
+      ibanDisplay: "TR13 0001 0004 5552 2650 6950 01",
+      ibanClean: "TR130001000455522650695001"
+    };
+
+    function showToast(message){
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1700);
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        return true;
+      }catch(err){
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+        return true;
+      }
+    }
+
+    async function copyField(id, button){
+      let value = document.getElementById(id).innerText.trim();
+
+      if(id === "iban"){
+        value = data.ibanClean;
+      }
+
+      await copyText(value);
+
+      button.classList.add("copied");
+      const old = button.innerHTML;
+      button.innerHTML = "✓";
+
+      setTimeout(() => {
+        button.classList.remove("copied");
+        button.innerHTML = old;
+      }, 1200);
+
+      showToast(id === "iban" ? "IBAN kopyalandı" : "Bilgi kopyalandı");
+    }
+
+    async function copyAll(){
+      const text =
+`Ziraat Bankası Ödeme Bilgileri
+
+Alıcı Adı / Ticari Unvan:
+${data.recipient}
+
+Banka:
+${data.bank}
+
+IBAN:
+${data.ibanClean}`;
+
+      await copyText(text);
+      showToast("Tüm bilgiler kopyalandı");
+    }
+
+    const shareText =
+`Ziraat Bankası Ödeme Bilgileri
+
+Alıcı Adı / Ticari Unvan:
+${data.recipient}
+
+Banka:
+${data.bank}
+
+IBAN:
+${data.ibanClean}`;
+
+    document.getElementById("whatsappShare").href =
+      "https://wa.me/?text=" + encodeURIComponent(shareText);
+  </script>
+</body>
+</html>
